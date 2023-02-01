@@ -1,0 +1,17 @@
+.navigational-panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.icon-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon-button__text {
+    font-size: 11px;
+    margin-top: -9px;
+    margin-bottom: 7px;
+}

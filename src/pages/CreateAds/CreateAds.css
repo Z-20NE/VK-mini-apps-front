@@ -1,0 +1,7 @@
+.formItemLayout {
+    margin-top: 28px;
+}
+
+.time {
+    width: calc(50% - 16px);
+}

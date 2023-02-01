@@ -1,0 +1,718 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "HandOver API",
+    "description": "HandOver API",
+    "contact": { "email": "nikitos2255@yandex.ru" },
+    "license": { "name": "Apache 2.0", "url": "http://www.apache.org/licenses/LICENSE-2.0.html" },
+    "version": "1.2"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/NikitaLobaev/HandOver/1.2",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "tags": [
+    { "name": "sessions", "description": "Обработчики авторизации пользователей" },
+    { "name": "users", "description": "Обработчики профиля пользователей" },
+    { "name": "ads", "description": "Обработчики объявлений заказчиков" }
+  ],
+  "paths": {
+    "/api/sessions": {
+      "post": {
+        "tags": ["sessions"],
+        "summary": "Авторизация",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/api_sessions_body" } } },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешная авторизация.\nВозвращает данные авторизованного пользователя.\n",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_200" } } }
+          },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/users/routes-tmp": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Создание разового маршрута в расписании",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/users_routestmp_body" } } },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Маршрут успешно создан.\nВозвращает данные созданного маршрута.\n",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/users/routes-tmp/{id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Получение разового маршрута из расписания",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор маршрута в расписании.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Возвращает данные маршрута.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "403": { "description": "Получение чужих маршрутов запрещено." },
+          "404": { "description": "Маршрут не найден." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      },
+      "put": {
+        "tags": ["users"],
+        "summary": "Обновление разового маршрута в расписании",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор маршрута в расписании.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/routestmp_id_body" } } },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Маршрут успешно обновлён.\nВозвращает данные обновлённого маршрута.\n",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "403": { "description": "Обновление чужих маршрутов запрещено." },
+          "404": { "description": "Маршрут не найден." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      },
+      "delete": {
+        "tags": ["users"],
+        "summary": "Удаление разового маршрута из расписания",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор маршрута в расписании.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Маршрут успешно удалён.\nВозвращает данные удалённого маршрута.\n",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "403": { "description": "Удаление чужих маршрутов запрещено." },
+          "404": { "description": "Маршрут не найден." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/users/routes-tmp/list": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Список разовых маршрутов в расписании",
+        "responses": {
+          "200": {
+            "description": "Возвращает список маршрутов.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_200_1" } } }
+          },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/users/routes-perm": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Создание постоянного маршрута в расписании",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/users_routesperm_body" } } },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Маршрут успешно создан.\nВозвращает данные созданного маршрута.\n",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201_1" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/users/routes-perm/{id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Получение постоянного маршрута из расписания",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор маршрута в расписании.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Возвращает данные маршрута.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201_1" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "403": { "description": "Получение чужих маршрутов запрещено." },
+          "404": { "description": "Маршрут не найден." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      },
+      "put": {
+        "tags": ["users"],
+        "summary": "Обновление постоянного маршрута в расписании",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор маршрута в расписании.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/routesperm_id_body" } } },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Маршрут успешно обновлён.\nВозвращает данные обновлённого маршрута.\n",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201_1" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "403": { "description": "Обновление чужих маршрутов запрещено." },
+          "404": { "description": "Маршрут не найден." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      },
+      "delete": {
+        "tags": ["users"],
+        "summary": "Удаление постоянного маршрута из расписания",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор маршрута в расписании.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Маршрут успешно удалён.\nВозвращает данные удалённого маршрута.\n",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201_1" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "403": { "description": "Удаление чужих маршрутов запрещено." },
+          "404": { "description": "Маршрут не найден." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/users/routes-perm/list": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Список постоянных маршрутов в расписании",
+        "responses": {
+          "200": {
+            "description": "Возвращает список маршрутов.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_200_2" } } }
+          },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/ads": {
+      "post": {
+        "tags": ["ads"],
+        "summary": "Создание объявления",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/api_ads_body" } } },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Объявление успешно создано.\nВозвращает данные созданного объявления.\n",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201_2" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/ads/{id}": {
+      "get": {
+        "tags": ["ads"],
+        "summary": "Получение объявления",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор объявления исполнителя.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Возвращает данные объявления.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201_2" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "404": { "description": "Объявление не найдено." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      },
+      "put": {
+        "tags": ["ads"],
+        "summary": "Обновление объявления",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор объявления исполнителя.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "requestBody": {
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AdUpdate" } } },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Объявление успешно обновлено.\nВозвращает данные обновлённого объявления.\n",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201_2" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "403": { "description": "Обновление чужих объявлений запрещено." },
+          "404": { "description": "Объявление не найдено." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      },
+      "delete": {
+        "tags": ["ads"],
+        "summary": "Удаление объявления",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор объявления исполнителя.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Объявление успешно удалено.\nВозвращает данные удалённого объявления.\n",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201_2" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "403": { "description": "Удаление чужих объявлений запрещено." },
+          "404": { "description": "Объявление не найдено." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/ads/list": {
+      "get": {
+        "tags": ["ads"],
+        "summary": "Список объявлений пользователя",
+        "responses": {
+          "200": {
+            "description": "Возвращает список объявлений пользователя.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_200_3" } } }
+          },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/ads/search": {
+      "get": {
+        "tags": ["ads"],
+        "summary": "Поиск объявлений",
+        "parameters": [
+          {
+            "name": "loc_dep",
+            "in": "query",
+            "description": "Место отправления",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": { "type": "string" },
+            "example": "Корпус Энерго"
+          },
+          {
+            "name": "loc_arr",
+            "in": "query",
+            "description": "Место прибытия",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": { "type": "string" },
+            "example": "Корпус УЛК"
+          },
+          {
+            "name": "date_time_arr",
+            "in": "query",
+            "description": "Дата и время прибытия",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": { "type": "string", "format": "date-time" },
+            "example": "02.01.2006 04:15"
+          },
+          {
+            "name": "max_price",
+            "in": "query",
+            "description": "Максимальная цена доставки (в рублях)",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": { "minimum": 0, "type": "number", "format": "int32" },
+            "example": 1000
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Сортировка (0 - сначала новые, 1 - сначала старые, 2 - сначала дорогие, 3 - сначала дешёвые)",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": { "maximum": 3, "minimum": 0, "type": "number", "format": "int32" },
+            "example": 0
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Возвращает список объявлений.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_200_3" } } }
+          },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    },
+    "/api/ads/{id}/execution": {
+      "post": {
+        "tags": ["ads"],
+        "summary": "Назначение исполнителем объявления",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор объявления исполнителя.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Возвращает данные объявления.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201_2" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "403": { "description": "Назначение себя исполнителем своего объявления запрещено." },
+          "404": { "description": "Объявление не найдено." },
+          "409": { "description": "У объявления уже задан исполнитель." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      },
+      "delete": {
+        "tags": ["ads"],
+        "summary": "Отказ быть исполнителем объявления",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Идентификатор объявления исполнителя.",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": { "type": "number", "format": "int32" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Возвращает данные объявления.",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/inline_response_201_2" } } }
+          },
+          "401": { "description": "Не авторизован." },
+          "403": { "description": "Не является исполнителем объявления." },
+          "404": { "description": "Объявление не найдено." },
+          "500": { "description": "Внутренняя ошибка сервера." }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "vkId": { "type": "number", "description": "Идентификатор VK Mini App", "format": "int32" },
+          "name": { "minLength": 2, "type": "string", "description": "Имя", "example": "Василий Петров" },
+          "avatar": {
+            "maxLength": 500,
+            "type": "string",
+            "description": "URL аватара",
+            "example": "http://yandex.ru/favicon.png"
+          }
+        }
+      },
+      "Route": {
+        "type": "object",
+        "properties": {
+          "locDep": { "type": "string", "description": "Место отправления", "example": "Корпус Энерго" },
+          "locArr": { "type": "string", "description": "Место прибытия", "example": "Корпус УЛК" },
+          "minPrice": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Минимальная цена доставки (в рублях)",
+            "format": "int32",
+            "example": 500
+          }
+        }
+      },
+      "RouteTmpCreate": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Route" },
+          {
+            "type": "object",
+            "properties": {
+              "dateTimeDep": { "type": "string", "description": "Дата и время отправления", "format": "date-time" },
+              "dateTimeArr": { "type": "string", "description": "Дата и время прибытия", "format": "date-time" }
+            }
+          }
+        ]
+      },
+      "RouteTmpUpdate": { "$ref": "#/components/schemas/RouteTmpCreate" },
+      "RouteTmp": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "description": "Идентификатор расписания",
+                "format": "int32",
+                "readOnly": true
+              },
+              "userAuthorVkId": {
+                "type": "number",
+                "description": "Идентификатор автора расписания",
+                "format": "int32",
+                "readOnly": true
+              }
+            }
+          },
+          { "$ref": "#/components/schemas/RouteTmpCreate" }
+        ]
+      },
+      "RoutePermCreate": {
+        "allOf": [
+          { "$ref": "#/components/schemas/Route" },
+          {
+            "type": "object",
+            "properties": {
+              "evenWeek": { "type": "boolean", "description": "По чётным неделям", "example": true },
+              "oddWeek": { "type": "boolean", "description": "По нечётным неделям", "example": true },
+              "dayOfWeek": { "type": "string", "description": "День недели", "format": "date-time" },
+              "timeDep": { "type": "string", "description": "Время отправления", "format": "date-time" },
+              "timeArr": { "type": "string", "description": "Время прибытия", "format": "date-time" }
+            }
+          }
+        ]
+      },
+      "RoutePermUpdate": { "$ref": "#/components/schemas/RoutePermCreate" },
+      "RoutePerm": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "description": "Идентификатор расписания",
+                "format": "int32",
+                "readOnly": true
+              },
+              "userAuthorVkId": {
+                "type": "number",
+                "description": "Идентификатор автора расписания",
+                "format": "int32",
+                "readOnly": true
+              }
+            }
+          },
+          { "$ref": "#/components/schemas/RoutePermCreate" }
+        ]
+      },
+      "AdCreate": {
+        "type": "object",
+        "properties": {
+          "locDep": { "type": "string", "description": "Место отправления", "example": "Корпус Энерго" },
+          "locArr": { "type": "string", "description": "Место прибытия", "example": "Корпус УЛК" },
+          "dateTimeArr": { "type": "string", "description": "Дата и время прибытия", "format": "date-time" },
+          "item": {
+            "maxLength": 50,
+            "minLength": 3,
+            "type": "string",
+            "description": "Доставляемый предмет",
+            "example": "Зачётная книжка"
+          },
+          "minPrice": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Минимальная цена доставки (в рублях)",
+            "format": "int32",
+            "example": 500
+          },
+          "comment": {
+            "maxLength": 100,
+            "type": "string",
+            "description": "Комментарий",
+            "example": "Ребята, просьба срочно довезти!"
+          }
+        }
+      },
+      "AdUpdate": { "$ref": "#/components/schemas/AdCreate" },
+      "Ad": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "description": "Идентификатор объявления",
+                "format": "int32",
+                "readOnly": true
+              },
+              "userAuthorVkId": {
+                "type": "number",
+                "description": "Идентификатор автора объявления",
+                "format": "int32",
+                "readOnly": true
+              },
+              "userAuthorName": {
+                "minLength": 2,
+                "type": "string",
+                "description": "Имя автора объявления",
+                "example": "Василий Петров"
+              },
+              "userAuthorAvatar": {
+                "maxLength": 500,
+                "type": "string",
+                "description": "URL аватара автора объявления",
+                "example": "http://yandex.ru/favicon.png"
+              },
+              "userExecutorVkId": {
+                "type": "number",
+                "description": "Идентификатор исполнителя объявления",
+                "format": "int32",
+                "readOnly": true
+              }
+            }
+          },
+          { "$ref": "#/components/schemas/AdCreate" }
+        ]
+      },
+      "api_sessions_body": {
+        "allOf": [{ "$ref": "#/components/schemas/User" }, { "required": ["avatar", "name", "vkId"] }]
+      },
+      "inline_response_200": { "type": "object", "properties": { "data": { "$ref": "#/components/schemas/User" } } },
+      "users_routestmp_body": {
+        "allOf": [
+          { "$ref": "#/components/schemas/RouteTmpCreate" },
+          { "required": ["dateTimeArr", "dateTimeDep", "locArr", "locDep", "minPrice"] }
+        ]
+      },
+      "inline_response_201": {
+        "type": "object",
+        "properties": { "data": { "$ref": "#/components/schemas/RouteTmp" } }
+      },
+      "routestmp_id_body": {
+        "allOf": [
+          { "$ref": "#/components/schemas/RouteTmpUpdate" },
+          { "required": ["dateTimeArr", "dateTimeDep", "locArr", "locDep", "minPrice"] }
+        ]
+      },
+      "inline_response_200_1": {
+        "type": "object",
+        "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/RouteTmp" } } }
+      },
+      "users_routesperm_body": {
+        "allOf": [
+          { "$ref": "#/components/schemas/RoutePermCreate" },
+          { "required": ["dayOfWeek", "evenWeek", "locArr", "locDep", "minPrice", "oddWeek", "timeArr", "timeDep"] }
+        ]
+      },
+      "inline_response_201_1": {
+        "type": "object",
+        "properties": { "data": { "$ref": "#/components/schemas/RoutePerm" } }
+      },
+      "routesperm_id_body": {
+        "allOf": [
+          { "$ref": "#/components/schemas/RoutePermUpdate" },
+          { "required": ["dayOfWeek", "evenWeek", "locArr", "locDep", "minPrice", "oddWeek", "timeArr", "timeDep"] }
+        ]
+      },
+      "inline_response_200_2": {
+        "type": "object",
+        "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/RoutePerm" } } }
+      },
+      "api_ads_body": {
+        "allOf": [{ "$ref": "#/components/schemas/AdCreate" }, { "required": ["locArr", "locDep", "timeArr"] }]
+      },
+      "inline_response_201_2": { "type": "object", "properties": { "data": { "$ref": "#/components/schemas/Ad" } } },
+      "inline_response_200_3": {
+        "type": "object",
+        "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/Ad" } } }
+      }
+    }
+  }
+}
